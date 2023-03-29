@@ -1,4 +1,5 @@
 import {UserEntity} from "../types";
+import {ValidationError} from "../utils/errors";
 
 export class UserRecord implements UserEntity {
     id?: string;
