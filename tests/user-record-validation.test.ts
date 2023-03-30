@@ -5,7 +5,7 @@ const testObj = {
     password: "correctPwd"
 };
 
-test('Expect to get email and password through validation', async () => {
+test('Expect to pass email and password validation', () => {
 
     const newUser = new UserRecord(testObj);
 
@@ -24,6 +24,11 @@ test('Expect to get email validation error', () => {
 
     expect(() => new UserRecord({
         ...testObj,
+        email: "loremIpsumloremIpsumloremIpsumloremIpsumloremIpsumloremIpsumloremIpsumloremIpsumloremIpsumloremIpsumloremIpsumloremIpsumloremIpsumloremIpsumloremIpsumloremIpsumloremIpsumloremIpsumloremIpsumloremIpsumloremIpsum@loremIpsumloremIpsum.comloremIpsumssssserqwergdfgfd"
+    })).toThrow("Invalid email!");
+
+    expect(() => new UserRecord({
+        ...testObj,
         email: ""
     })).toThrow("Invalid email!");
 })
@@ -33,5 +38,10 @@ test('Expect to get password validation error', () => {
     expect(() => new UserRecord({
         ...testObj,
         password: "bad"
-    })).toThrow('Password should have at least 6 characters!');
+    })).toThrow('Password should have at least 8 characters but no more than 100!');
+
+    expect(() => new UserRecord({
+        ...testObj,
+        password: "Password should have at least 8 characters but no more than 100!Password should have at least 8 characters b!"
+    })).toThrow('Password should have at least 8 characters but no more than 100!');
 })
