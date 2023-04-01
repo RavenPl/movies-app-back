@@ -8,7 +8,6 @@ export class NoFoundError extends Error {
 
 export const handleErrors = (err: Error, req: Request, res: Response, next: NextFunction): void => {
 
-    console.error(err);
     if (err instanceof NoFoundError) {
 
         // res
