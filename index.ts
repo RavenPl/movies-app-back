@@ -1,19 +1,25 @@
-import express, {json} from 'express';
+import express, {json, Router} from 'express';
 import 'express-async-errors';
 import cors from 'cors';
+import cookieParser from "cookie-parser";
 
 import {handleErrors} from "./utils/errors";
 import {config} from "./config/config";
 import {AuthRouter} from './routers/auth'
+import {notFound} from "./middlewares/notFound";
 
+const router = Router();
 const app = express();
 
 app.use(cors({
     origin: config.corsOrigin,
 }));
 app.use(json());
+app.use(cookieParser());
 
-app.use('/auth', AuthRouter);
+router.use('/auth', AuthRouter);
+app.use('/movies', router);
+app.use('*', notFound);
 
 app.use(handleErrors);
 
