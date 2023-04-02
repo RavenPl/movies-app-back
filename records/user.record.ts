@@ -39,12 +39,12 @@ export class UserRecord implements UserEntity {
         return user.length === 0 ? null : new UserRecord(user[0])
     }
 
-    static async getOneByToken(currentTokenId: string): Promise<true | false> {
+    static async getOneByToken(currentTokenId: string): Promise<UserRecord | false> {
         const [user] = (await pool.execute('SELECT * FROM `users` WHERE `currentTokenId` = :currentTokenId', {
             currentTokenId,
         })) as UserRecordResult;
 
-        return user.length === 1;
+        return user.length === 1 ? new UserRecord(user[0]) : false;
     }
 
     static async getAll(): Promise<UserRecord[] | null> {

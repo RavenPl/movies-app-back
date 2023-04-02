@@ -4,6 +4,8 @@ import {compare} from "bcrypt";
 import {UserRecord} from "../records/user.record";
 import {hashPwd} from "../utils/hashPwd";
 import {createToken, generateToken} from "../utils/tokenCreator";
+import {authenticate} from "../middlewares/authenticate";
+import {CustomRequest} from "../types";
 
 
 export const AuthRouter = Router();
@@ -19,7 +21,18 @@ AuthRouter
         res.json({mes: "Log form"})
     })
 
-    .get('/logout', (req, res) => {
+    .get('/logout', authenticate, async (req, res) => {
+
+        const {tokenId} = req as CustomRequest;
+        if (tokenId) {
+            const user = await UserRecord.getOneByToken(tokenId);
+            if (!user) {
+                return res.status(400).json({msg: "Wrong token!"})
+            }
+
+            user.currentTokenId = null;
+            await user.save()
+        }
 
         res
             .clearCookie('jwt', {
@@ -76,9 +89,7 @@ AuthRouter
                         domain: 'localhost',
                         httpOnly: true,
                     })
-                    .json({
-                        msg: "Logged in!",
-                    });
+                    .redirect('/auth/test')
 
             } else {
                 return res.status(401).json({msg: "Wrong password!"})
@@ -87,4 +98,19 @@ AuthRouter
             console.log(e);
             throw new Error()
         }
+    })
+
+    .get('/test', authenticate, async (req, res) => {
+
+        const {tokenId} = req as CustomRequest;
+
+        if (tokenId) {
+            const user = await UserRecord.getOneByToken(tokenId);
+            if (user) {
+                const {id, email} = user;
+
+                return res.json({msg: {id, email}})
+            }
+        }
+        res.json({msg: "ok"})
     })
