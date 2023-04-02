@@ -10,11 +10,11 @@ export const handleErrors = (err: Error, req: Request, res: Response, next: Next
 
     if (err instanceof NoFoundError) {
 
-        // res
-        //     .status(404)
-        //     .json({
-        //         message: 'There is no movie with this ID!', @TODO 'błąd no found i 404'
-        //     })
+        res
+            .status(404)
+            .json({
+                message: '404 - page not found!',
+            })
     } else {
 
         res
