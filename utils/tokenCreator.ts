@@ -21,7 +21,7 @@ export const generateToken = async (user: UserRecord) => {
     do {
         token = uuid();
         userWithThisToken = await UserRecord.getOneByToken(token);
-    } while (userWithThisToken);
+    } while (!!userWithThisToken);
 
     user.currentTokenId = token;
     await user.save();
