@@ -10,15 +10,16 @@ import {notFound} from "./middlewares/notFound";
 
 const router = Router();
 const app = express();
-
 app.use(cors({
     origin: config.corsOrigin,
+    credentials: true,
 }));
+
 app.use(json());
 app.use(cookieParser());
 
-router.use('/auth', AuthRouter);
 app.use('/movies', router);
+router.use('/auth', AuthRouter);
 app.use('*', notFound);
 
 app.use(handleErrors);

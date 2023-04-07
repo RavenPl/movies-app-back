@@ -12,14 +12,14 @@ export const authenticate = (req: CustomRequest, res: Response, next: NextFuncti
 
         return res
             .status(403)
-            .json({msg: "Unauthorized"})
+            .json({message: "Unauthorized", authorized: false})
     }
 
     verify(token, config.jwtPassword, async (err: VerifyErrors | null, data: JwtPayload | string | undefined) => {
         if (err || !data) {
             return res
                 .status(403)
-                .json({msg: "Unauthorized"})
+                .json({message: "Unauthorized - after check"})
         }
 
         const {id} = data as JwtPayload;
