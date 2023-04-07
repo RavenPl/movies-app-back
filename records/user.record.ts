@@ -19,13 +19,14 @@ export class UserRecord implements UserEntity {
         const {password, email} = obj;
 
         if (password.length < 8 || password.length > 100) {
-            throw new ValidationError('Password should have at least 8 characters but no more than 100!')
+            throw new ValidationError('Password should have at least 8 characters!')
         }
 
         if (!email || email.indexOf('@') === -1 || email.length > 255) {
             throw new ValidationError('Invalid email!')
         }
 
+        this.currentTokenId = obj.currentTokenId;
         this.id = obj.id;
         this.email = email.trim();
         this.password = password;
