@@ -16,19 +16,19 @@ export class UserRecord implements UserEntity {
 
     constructor(obj: UserRecordInsert) {
 
-        const {password, email, currentTokenId} = obj;
+        const {password, email} = obj;
 
         if (password.length < 8 || password.length > 100) {
-            throw new ValidationError('Password should have at least 8 characters but no more than 100!')
+            throw new ValidationError('Password should have at least 8 characters!')
         }
 
         if (!email || email.indexOf('@') === -1 || email.length > 255) {
             throw new ValidationError('Invalid email!')
         }
 
+        this.currentTokenId = obj.currentTokenId;
         this.id = obj.id;
         this.email = email.trim();
-        // this.currentTokenId = currentTokenId;
         this.password = password;
     }
 
@@ -38,6 +38,14 @@ export class UserRecord implements UserEntity {
         })) as UserRecordResult;
 
         return user.length === 0 ? null : new UserRecord(user[0])
+    }
+
+    static async getOneByToken(currentTokenId: string): Promise<UserRecord | false> {
+        const [user] = (await pool.execute('SELECT * FROM `users` WHERE `currentTokenId` = :currentTokenId', {
+            currentTokenId,
+        })) as UserRecordResult;
+
+        return user.length === 1 ? new UserRecord(user[0]) : false;
     }
 
     static async getAll(): Promise<UserRecord[] | null> {
