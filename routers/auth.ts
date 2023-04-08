@@ -18,7 +18,7 @@ AuthRouter
         if (tokenId) {
             const user = await UserRecord.getOneByToken(tokenId);
             if (!user) {
-                return res.status(401).json({message: "Wrong token!"})
+                return res.status(498).json({message: "Wrong token!"})
             }
 
             user.currentTokenId = null;
@@ -26,12 +26,8 @@ AuthRouter
         }
 
         res
-            .clearCookie('jwt', {
-                secure: false,
-                domain: 'localhost',
-                httpOnly: true,
-            })
-            .json({message: "Logged out!", authorized: true})
+            .clearCookie('jwt')
+            .json({message: "Logged out!", authorized: false})
     })
 
     .post('/register', async (req, res) => {
@@ -88,6 +84,24 @@ AuthRouter
             console.log(e);
             throw new Error()
         }
+    })
+
+    .delete('/', authenticate, async (req, res) => {
+        console.log(req.cookies, req.path, req.url, '?');
+        const {tokenId} = req as CustomRequest;
+
+        if (tokenId) {
+            const user = await UserRecord.getOneByToken(tokenId);
+            if (!user) {
+                return res.status(498).json({message: "Wrong token!"})
+            }
+
+            await user.delete();
+        }
+        res
+            .clearCookie('jwt')
+            .json({message: "Logged out!", authorized: false})
+
     })
 
     .get('/test', authenticate, async (req, res) => {
