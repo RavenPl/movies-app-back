@@ -1,11 +1,11 @@
 import {Router} from 'express';
 import {compare} from "bcrypt";
 
-import {UserRecord} from "../records/user.record";
 import {hashPwd} from "../utils/hashPwd";
 import {createToken, generateToken} from "../utils/tokenCreator";
 import {authenticate} from "../middlewares/authenticate";
 import {CustomRequest} from "../types";
+import {UserRecord} from "../records/user.record";
 
 
 export const AuthRouter = Router();
@@ -87,7 +87,7 @@ AuthRouter
     })
 
     .delete('/', authenticate, async (req, res) => {
-        console.log(req.cookies, req.path, req.url, '?');
+
         const {tokenId} = req as CustomRequest;
 
         if (tokenId) {
@@ -113,11 +113,11 @@ AuthRouter
 
             if (user) {
                 const {id, email} = user;
-                return res.json({message: {id, email}, authorized: true}).end()
+                return res.json({message: {id, email}, authorized: true})
             }
         }
 
         return res
-            .status(403)
-            .json({message: "Unauthorized", authorized: false}).end()
+            .status(401)
+            .json({message: "Unauthorized", authorized: false})
     })

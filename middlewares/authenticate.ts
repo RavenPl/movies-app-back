@@ -11,14 +11,15 @@ export const authenticate = (req: CustomRequest, res: Response, next: NextFuncti
     if (!token) {
 
         return res
-            .status(403)
+            .status(401)
             .json({message: "Unauthorized", authorized: false})
     }
 
     verify(token, config.jwtPassword, async (err: VerifyErrors | null, data: JwtPayload | string | undefined) => {
+
         if (err || !data) {
             return res
-                .status(403)
+                .status(401)
                 .json({message: "Unauthorized - after check"})
         }
 
@@ -27,5 +28,4 @@ export const authenticate = (req: CustomRequest, res: Response, next: NextFuncti
 
         next();
     })
-
 }
