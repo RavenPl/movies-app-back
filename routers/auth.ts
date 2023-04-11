@@ -1,11 +1,11 @@
 import {Router} from 'express';
 import {compare} from "bcrypt";
 
-import {UserRecord} from "../records/user.record";
 import {hashPwd} from "../utils/hashPwd";
 import {createToken, generateToken} from "../utils/tokenCreator";
 import {authenticate} from "../middlewares/authenticate";
 import {CustomRequest} from "../types";
+import {UserRecord} from "../records/user.record";
 
 
 export const AuthRouter = Router();
@@ -18,7 +18,7 @@ AuthRouter
         if (tokenId) {
             const user = await UserRecord.getOneByToken(tokenId);
             if (!user) {
-                return res.status(401).json({message: "Wrong token!"})
+                return res.status(498).json({message: "Wrong token!"})
             }
 
             user.currentTokenId = null;
@@ -26,12 +26,8 @@ AuthRouter
         }
 
         res
-            .clearCookie('jwt', {
-                secure: false,
-                domain: 'localhost',
-                httpOnly: true,
-            })
-            .json({message: "Logged out!", authorized: true})
+            .clearCookie('jwt')
+            .json({message: "Logged out!", authorized: false})
     })
 
     .post('/register', async (req, res) => {
@@ -90,6 +86,24 @@ AuthRouter
         }
     })
 
+    .delete('/', authenticate, async (req, res) => {
+
+        const {tokenId} = req as CustomRequest;
+
+        if (tokenId) {
+            const user = await UserRecord.getOneByToken(tokenId);
+            if (!user) {
+                return res.status(498).json({message: "Wrong token!"})
+            }
+
+            await user.delete();
+        }
+        res
+            .clearCookie('jwt')
+            .json({message: "Logged out!", authorized: false})
+
+    })
+
     .get('/test', authenticate, async (req, res) => {
 
         const {tokenId} = req as CustomRequest;
@@ -99,11 +113,11 @@ AuthRouter
 
             if (user) {
                 const {id, email} = user;
-                return res.json({message: {id, email}, authorized: true}).end()
+                return res.json({message: {id, email}, authorized: true})
             }
         }
 
         return res
-            .status(403)
-            .json({message: "Unauthorized", authorized: false}).end()
+            .status(401)
+            .json({message: "Unauthorized", authorized: false})
     })
