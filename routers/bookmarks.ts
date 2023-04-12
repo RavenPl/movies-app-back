@@ -1,4 +1,5 @@
 import {Router} from "express";
+
 import {authenticate} from "../middlewares/authenticate";
 import {CustomRequest} from "../types";
 import {UserRecord} from "../records/user.record";
@@ -7,6 +8,7 @@ import {MovieRecord} from "../records/movie.record";
 export const BookmarksRouter = Router();
 
 BookmarksRouter
+
     .get("/", authenticate, async (req, res) => {
 
         const {tokenId} = req as CustomRequest;
@@ -14,16 +16,20 @@ BookmarksRouter
         if (tokenId) {
             const user = await UserRecord.getOneByToken(tokenId);
 
-            if (user && user.id) {
-
-                const bookmarks = await MovieRecord.getAll(user.id);
-                const bookmarksFiltered = bookmarks.map(obj => ({
-                    movieId: obj.movieId,
-                    isFavourite: obj.isFavourite
-                }))
-
-                return res.json({bookmarks: bookmarksFiltered})
+            if (!user || !user.id) {
+                return res.status(498).json({message: "Wrong token!"})
             }
+
+            const bookmarks = await MovieRecord.getAll(user.id);
+            const bookmarksFiltered = bookmarks.map(obj => ({
+                movieId: obj.movieId,
+                isFavourite: obj.isFavourite
+            }))
+
+            return res
+                .status(200)
+                .json({bookmarks: bookmarksFiltered})
+
         }
     })
 
@@ -54,7 +60,7 @@ BookmarksRouter
 
     .delete("/", authenticate, async (req, res) => {
 
-        const {movieId, isFavourite} = req.body as {
+        const {movieId} = req.body as {
             movieId: string,
             isFavourite: boolean,
         };
@@ -75,6 +81,6 @@ BookmarksRouter
         }
 
         res
-            .status(201)
+            .status(200)
             .json({message: "Movie deleted."})
     })
