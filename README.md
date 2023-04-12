@@ -43,6 +43,7 @@
 <details>  
 <summary>Security</summary>  
 <ul>  
+ <li>JWT</li>
 <li>Helmet</li> 
 <li>Express Rate Limit</li>
 </ul>  
