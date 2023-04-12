@@ -31,7 +31,7 @@
 
 <br/>
 
-# :space_invader: Tech Stack
+# :space_invader: Tech Stack [BE]
 
 <details>  
   <summary>Server</summary>  
@@ -55,7 +55,7 @@
   </ul>  
 </details>  
 
-## Technology used
+## All technologies used in project
 
 <p align="left">
 <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> &nbsp;&nbsp;&nbsp;&nbsp;
