@@ -2,7 +2,7 @@
   <h1>Movies App [BE] - v3</h1>
   
 # :video_game: View Demo</a> 
-###  :link: Frontend repository</a> 
+###  :link: <a href:"https://github.com/RavenPl/movies-app-front.git"> Frontend repository</a> 
 </div>  
 <!-- Table of Contents -->  
 
@@ -19,7 +19,7 @@
     * [Prerequisites](#heavy_exclamation_mark-prerequisites)
     * [Run Locally](#running-run-locally)
 - [Usage](#eyes-usage)
-- [Project Status](#hammer_and_wrench-project-status)
+- [Bugs](#hammer_and_wrench-project-status)
 
 <br/>
 
@@ -73,11 +73,11 @@
 
 # :dart: Features
 
-- adding a new book to the list :heavy_check_mark:
-- editing existing ones :heavy_check_mark:
-- deleting specific one or all at once :heavy_check_mark:
-- you can search your book by title or by author name :heavy_check_mark:
-- you can list your positions by title, author, page number or by status :heavy_check_mark:
+- search for movies, series or games :heavy_check_mark:
+- adding them to your favourite list :heavy_check_mark:
+- removing from the bookmark list :heavy_check_mark:
+- create your own account :heavy_check_mark:
+- delete your account :heavy_check_mark:
 
 <br/>
 
@@ -117,13 +117,13 @@ This project uses npm as package manager
 Clone the project
 
 ```bash  
- git clone https://github.com/RavenPl/MyLibrary-v3-BE.git
+ git clone https://github.com/RavenPl/movies-app-back.git
 ```  
 
 Go to the project directory
 
 ```bash  
- cd my-library-BE  
+ cd movies-app-back 
 ```  
 
 Install dependencies
@@ -146,26 +146,46 @@ Start the server
 2. Create table in your database using this SQL:
 
  ```
- CREATE TABLE IF NOT EXISTS `books` (
-  `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` varchar(5633) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `author` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `pages` int(5) NOT NULL,
-  `status` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'not read',
-  PRIMARY KEY (`id`)
+ CREATE TABLE IF NOT EXISTS `movies` (
+  `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT uuid(),
+  `movieId` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `isFavourite` int(1) NOT NULL DEFAULT 0,
+  `userId` varchar(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_movies_users` (`userId`),
+  CONSTRAINT `FK_movies_users` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `currentTokenId` varchar(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+ ```
+ 3. You can test the app using test user:
+ 
+ ```
+ - email: test@test.com
+ - password: 12345678
  ```
  
 <br/>
 
 # :deciduous_tree: Lessons Learned
 
+<p> :ballot_box_with_check: created authentication system using JWT
 <p> :ballot_box_with_check: putting together JavaScript, Typescript, mysql2 into one, working application</p>
 <p> :ballot_box_with_check: creating and running few test using Jest</p>
 <p> :ballot_box_with_check: adding basic security middlewares: express-rate-limit and helmet</p>
 <p> :ballot_box_with_check: fixing CORS problem</p>
+<p> :ballot_box_with_check: using one to many relation in real project and solving problems which come with it 
 
 <br/>
 
-# :hammer_and_wrench: Project Status
-
+# :hammer_and_wrench: Bugs
+  
+1. cant remove bookmark on bookmarks page 
+2. routes logic needs improvement
