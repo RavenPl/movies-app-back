@@ -2,7 +2,7 @@
   <h1>Movies App [BE] - v3</h1>
   
 # :video_game: View Demo</a> 
-###  :link: <a href:"https://github.com/RavenPl/movies-app-front.git"> Frontend repository</a> 
+###  :link: <a href="https://github.com/RavenPl/movies-app-front.git"> Frontend repository</a> 
 </div>  
 <!-- Table of Contents -->  
 
