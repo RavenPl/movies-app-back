@@ -1,4 +1,3 @@
-import {v4 as uuid} from 'uuid';
 import {UserRecord} from "../records/user.record";
 
 import {ValidationError} from "../utils/errors";
@@ -99,7 +98,7 @@ test('Expect currentTokenId to be UUID', async () => {
     const user = await UserRecord.getOneByEmail('correct@emial.com');
 
     if (user) {
-        user.currentTokenId = uuid();
+        // user.currentTokenId = uuid(); @TODO "add proper function instead of uuid()"
         await user.save();
     }
 

@@ -20,7 +20,7 @@ export const authenticate = (req: CustomRequest, res: Response, next: NextFuncti
         if (err || !data) {
             return res
                 .status(401)
-                .json({message: "Unauthorized - after check"})
+                .json({message: "Unauthorized"})
         }
 
         const {id} = data as JwtPayload;
