@@ -2,6 +2,8 @@ import express, {json, Router} from 'express';
 import 'express-async-errors';
 import cors from 'cors';
 import cookieParser from "cookie-parser";
+import rateLimit from "express-rate-limit";
+import helmet from 'helmet';
 
 import {handleErrors} from "./utils/errors";
 import {notFound} from "./middlewares/notFound";
@@ -19,6 +21,7 @@ app.use(cors({
 }));
 
 app.use(json());
+app.use(helmet());
 app.use(cookieParser());
 
 app.use('/movies', router);
@@ -27,7 +30,10 @@ router.use('/user', UserRouter);
 router.use('/user/bookmarks', BookmarksRouter);
 
 app.use('*', notFound);
-
+app.use(rateLimit({
+    windowMs: 5 * 60 * 1000,
+    max: 100,
+}));
 app.use(handleErrors);
 
 app.listen(3001, 'localhost', () => {
