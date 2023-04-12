@@ -49,4 +49,9 @@ export class MovieRecord implements MovieEntity {
         })
     }
 
+    static async deleteAll(userId: string): Promise<void> {
+        await pool.execute('DELETE FROM `movies` WHERE `userId` =:userId', {
+            userId,
+        })
+    }
 }
