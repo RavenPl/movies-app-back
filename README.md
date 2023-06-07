@@ -1,7 +1,7 @@
 <div align="center">  
   <h1>Movies App [BE]</h1>
   
-# :video_game: View Demo</a> 
+# <a href="https://movies.raven-pl.usermd.net"> :video_game: View Demo</a> 
 ###  :link: <a href="https://github.com/RavenPl/movies-app-front.git"> Frontend repository</a> 
 </div>  
 <!-- Table of Contents -->  
@@ -149,8 +149,25 @@ Start the server
 2. Create table in your database using this SQL:
 
  ```
- CREATE TABLE IF NOT EXISTS `movies` (
-  `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT uuid(),
+-- --------------------------------------------------------
+-- Host:                         127.0.0.1
+-- Wersja serwera:               10.4.24-MariaDB - mariadb.org binary distribution
+-- Serwer OS:                    Win64
+-- HeidiSQL Wersja:              12.0.0.6468
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+-- Zrzut struktury tabela movies_app.movies
+CREATE TABLE IF NOT EXISTS `movies` (
+  `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   `movieId` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `isFavourite` int(1) NOT NULL DEFAULT 0,
   `userId` varchar(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -159,6 +176,9 @@ Start the server
   CONSTRAINT `FK_movies_users` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Eksport danych został odznaczony.
+
+-- Zrzut struktury tabela movies_app.users
 CREATE TABLE IF NOT EXISTS `users` (
   `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -167,14 +187,17 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Eksport danych został odznaczony.
+
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+
  ```
- 3. You can test the app using test user:
- 
- ```
- - email: test@test.com
- - password: 12345678
- ```
- 
+
 <br/>
 
 # :deciduous_tree: Lessons Learned
@@ -190,5 +213,5 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 # :hammer_and_wrench: Bugs
   
-1. cant remove bookmark on bookmarks page 
+1. cant remove bookmark on bookmarks page - fixed!
 2. routes logic needs improvement
