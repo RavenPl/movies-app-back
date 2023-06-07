@@ -2,12 +2,15 @@ import {v4 as uuid} from 'uuid';
 import {sign} from "jsonwebtoken";
 
 import {UserRecord} from "../records/user.record";
-import {config} from "../config/config";
 
 export const createToken = async (currentTokenId: string) => {
+    const secret = process.env["JWT_PASSWORD"];
+    if (!secret) {
+        throw new Error('No jwt password!')
+    }
 
     const payload = {id: currentTokenId};
-    const accessToken = sign(payload, config.jwtPassword, {
+    const accessToken = sign(payload, secret, {
         expiresIn: "6h",
     });
     return {

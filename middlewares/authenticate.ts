@@ -1,7 +1,6 @@
 import {NextFunction, Response} from "express";
 import {JwtPayload, verify, VerifyErrors} from "jsonwebtoken";
 
-import {config} from "../config/config";
 import {CustomRequest} from "../types";
 
 export const authenticate = (req: CustomRequest, res: Response, next: NextFunction) => {
@@ -14,8 +13,11 @@ export const authenticate = (req: CustomRequest, res: Response, next: NextFuncti
             .status(401)
             .json({message: "Unauthorized", authorized: false})
     }
-
-    verify(token, config.jwtPassword, async (err: VerifyErrors | null, data: JwtPayload | string | undefined) => {
+    const secret = process.env["JWT_PASSWORD"];
+    if (!secret) {
+        throw new Error('No jwt password!')
+    }
+    verify(token, secret, async (err: VerifyErrors | null, data: JwtPayload | string | undefined) => {
 
         if (err || !data) {
             return res
